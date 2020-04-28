@@ -1,4 +1,5 @@
-use crate::account::account::*;
+#[allow(unused_imports)]
+use crate::account::account::Account;
 
 #[test]
 fn test_account_new() {

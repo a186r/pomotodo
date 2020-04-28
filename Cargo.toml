@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "account-sys",
+    "pomodb",
 ]
 
 [profile.release]

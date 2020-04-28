@@ -10,11 +10,12 @@ pub struct Account {
 
 // 声明一个账户信息结构体，用于保存用户信息
 pub struct AccountInfo {
-    username: Option<String>,
-    email: Option<String>,
-    eth_address: Option<String>,
-    btc_address: Option<String>,
-    xmr_address: Option<String>,
+    pub id: i32,
+    pub username: String,
+    pub email: String,
+    pub eth_address: String,
+    pub btc_address: String,
+    pub xmr_address: String,
 }
 
 // 账户与账户信息的对应关系
@@ -62,6 +63,7 @@ fn check_account(account: &Account) -> bool {
 /// 调用这个接口，检查账户是否创建，如果已经创建，则发送验证邮件
 /// 验证邮件中包含一个验证码
 /// `email` - 用户邮件信息
-fn check_email(email: Option<String>) -> bool {
+#[allow(dead_code)]
+fn check_email(_email: Option<String>) -> bool {
     return true;
 }
