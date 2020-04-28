@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/todolist/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/user-system/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/account-sys/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "user-system",
+    "account-sys",
 ]
 
 [profile.release]
