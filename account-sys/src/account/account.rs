@@ -8,9 +8,6 @@ pub struct Account {
 
 // 声明一个账户信息结构体，用于保存用户信息
 pub struct AccountInfo {
-    pub id: i32,
-    pub address: String,
-    pub pk: String,
     pub eth_address: String,
     pub btc_address: String,
     pub xmr_address: String,
@@ -25,24 +22,28 @@ impl Account {
         let account = Account {
             username: Some(String::from(username)),
         };
-        // 校验账户字段
-        check_account(&account);
-        return account;
+
+        if check_account(&account) {
+            return account;
+        }else{
+            panic!("");
+        }
     }
 }
 
 /// 检查账户信息是否完备
-/// 将账户信息签名后存储到链上去
 fn check_account(account: &Account) -> bool {
     if let Account {
         username: Some(username),
     } = account
     {
-        println!(
-            "username: {:?}",
-            username
-        );
-        return true;
+        if username.as_str().len() >= 3{
+            println!(
+                "username: {:?}",
+                username
+            );
+            return true;
+        }
     }
     false
 }
