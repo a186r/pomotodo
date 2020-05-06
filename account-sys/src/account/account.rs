@@ -1,3 +1,4 @@
+use super::error::{AccountError, Result};
 use std::collections::HashMap;
 
 // 声明一个账户结构体, 用于登陆
@@ -18,32 +19,31 @@ pub type Accounts = HashMap<Account, AccountInfo>;
 
 impl Account {
     /// 新建账户
-    pub fn new(username: &str) -> Account {
+    pub fn new(username: &str) -> Result<Account> {
         let account = Account {
             username: Some(String::from(username)),
         };
 
-        if check_account(&account) {
-            return account;
-        }else{
-            panic!("");
+        match check_account(&account) {
+            Ok(_) => Ok(account),
+            Err(e) => Err(e)
         }
+
+        // if check_account(&account) {
+        //     return account;
+        // }else{
+        //     println!("账户创建错误");
+        // }
     }
 }
 
 /// 检查账户信息是否完备
-fn check_account(account: &Account) -> bool {
-    if let Account {
-        username: Some(username),
-    } = account
-    {
-        if username.as_str().len() >= 3{
-            println!(
-                "username: {:?}",
-                username
-            );
-            return true;
-        }
+fn check_account(account: &Account) -> Result<bool> {
+
+    let Account{username: Some(username)} = account;
+
+    match username.as_str().len() >= 3 {
+        true => Ok(true),
+        false => Err(AccountError::ShortName)
     }
-    false
 }
