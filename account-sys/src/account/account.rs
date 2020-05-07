@@ -2,7 +2,7 @@ use super::error::{AccountError, Result};
 use std::collections::HashMap;
 
 // 声明一个账户结构体, 用于登陆
-#[derive(PartialEq, Eq, Hash)]
+#[derive(PartialEq, Eq, Hash, Debug)]
 pub struct Account {
     pub(crate) username: Option<String>,
 }
@@ -28,22 +28,22 @@ impl Account {
             Ok(_) => Ok(account),
             Err(e) => Err(e)
         }
-
-        // if check_account(&account) {
-        //     return account;
-        // }else{
-        //     println!("账户创建错误");
-        // }
     }
 }
 
 /// 检查账户信息是否完备
 fn check_account(account: &Account) -> Result<bool> {
 
-    let Account{username: Some(username)} = account;
+    let mut result: Result<bool> = Err(AccountError::ShortName);
 
-    match username.as_str().len() >= 3 {
-        true => Ok(true),
-        false => Err(AccountError::ShortName)
-    }
+    if let Account{username: Some(username)} = account {
+        result = match username.as_str().len() {
+            0 => Err(AccountError::EmptyParam),
+            1 => Err(AccountError::ShortName),
+            2 => Err(AccountError::ShortName),
+            _ => Ok(true)
+        };
+    };
+
+    return result;
 }
