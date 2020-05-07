@@ -78,7 +78,7 @@ impl Secret {
         self.to_secp256k1_secret().map(|_| ())
     }
 
-    // 将一个密钥添加到另一个
+    // 将另一个密钥添加到当前密钥
     pub fn add(&mut self, other: &Secret) -> Result<(), Error> {
         match (self.is_zero(), other.is_zero()) {
             (true, true) | (false, true) => Ok(()),
@@ -90,6 +90,38 @@ impl Secret {
                 let mut key_secret = self.to_secp256k1_secret()?;
                 let other_secret = other.to_secp256k1_secret()?;
                 key_secret.add_assign(&SECP256K1, &other_secret)?;
+
+                *self = key_secret.into();
+                Ok(())
+            }
+        }
+    }
+
+    // 另一个密钥减去当前密钥
+    pub fn sub(&mut self, other: &Secret) -> Result<(), Error> {
+        match (self.is_zero(), other.is_zero()) {
+            (true, true) | (false, true) => Ok(()),
+            (true, false) => {
+                *self = other.clone();
+                self.neg()
+            }
+            (false, false) => {
+                let mut key_secret = self.to_secp256k1_secret()?;
+                let other_secret = other.to_secp256k1_secret()?;
+                key_secret.mul_assign(&SECP256K1, &other_secret)?;
+
+                *self = key_secret.into();
+                Ok(())
+            }
+        }
+    }
+
+    pub fn neg(&mut self) -> Result<(), Error> {
+        match self.is_zero() {
+            true => Ok(()),
+            false => {
+                let mut key_secret = self.to_secp256k1_secret()?;
+                key_secret.mul_assign(&SECP256K1, &key::MINUS_ONE_KEY)?;
 
                 *self = key_secret.into();
                 Ok(())
