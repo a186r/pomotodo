@@ -1,9 +1,12 @@
 mod secret;
 mod keypair;
+// mod random;
+mod error;
 
 use ethereum_types;
 use lazy_static::*;
 use ethereum_types::H256;
+use secp256k1;
 
 pub use ethereum_types::{Address, Public};
 pub use self::secret::Secret;
@@ -14,6 +17,9 @@ pub type Message = H256;
 lazy_static! {
     pub static ref SECP256K1: secp256k1::Secp256k1 = secp256k1::Secp256k1::new();
 }
+
+#[derive(Debug)]
+pub enum Void{}
 
 pub trait Generator{
     type Error;

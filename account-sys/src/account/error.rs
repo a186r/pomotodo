@@ -2,7 +2,7 @@ use std::fmt;
 
 pub type Result<T> = std::result::Result<T, AccountError>;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum AccountError {
     EmptyParam,
     ShortName,
