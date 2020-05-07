@@ -26,22 +26,23 @@ impl Account {
 
         match check_account(&account) {
             Ok(_) => Ok(account),
-            Err(e) => Err(e)
+            Err(e) => Err(e),
         }
     }
 }
 
 /// 检查账户信息是否完备
 fn check_account(account: &Account) -> Result<bool> {
-
     let mut result: Result<bool> = Err(AccountError::ShortName);
 
-    if let Account{username: Some(username)} = account {
+    if let Account {
+        username: Some(username),
+    } = account
+    {
         result = match username.as_str().len() {
             0 => Err(AccountError::EmptyParam),
-            1 => Err(AccountError::ShortName),
-            2 => Err(AccountError::ShortName),
-            _ => Ok(true)
+            1 | 2 => Err(AccountError::ShortName),
+            _ => Ok(true),
         };
     };
 
