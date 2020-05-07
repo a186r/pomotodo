@@ -107,8 +107,9 @@ impl Secret {
             }
             (false, false) => {
                 let mut key_secret = self.to_secp256k1_secret()?;
-                let other_secret = other.to_secp256k1_secret()?;
-                key_secret.mul_assign(&SECP256K1, &other_secret)?;
+                let mut other_secret = other.to_secp256k1_secret()?;
+                other_secret.mul_assign(&SECP256K1, &key::MINUS_ONE_KEY)?;
+                key_secret.add_assign(&SECP256K1, &other_secret)?;
 
                 *self = key_secret.into();
                 Ok(())
