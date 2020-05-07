@@ -24,6 +24,7 @@ impl Account {
             username: Some(String::from(username)),
         };
 
+        // 检查账户信息
         match check_account(&account) {
             Ok(_) => Ok(account),
             Err(e) => Err(e),
@@ -39,12 +40,20 @@ fn check_account(account: &Account) -> Result<bool> {
         username: Some(username),
     } = account
     {
-        result = match username.as_str().len() {
-            0 => Err(AccountError::EmptyParam),
-            1 | 2 => Err(AccountError::ShortName),
-            _ => Ok(true),
+        result = match check_username(username) {
+            Ok(_) => Ok(true),
+            Err(e) => Err(e)
         };
     };
 
     return result;
+}
+
+/// 检查username是否重复
+fn check_username(username: &String) -> Result<bool> {
+    match username.as_str().len() {
+        0 => Err(AccountError::EmptyParam),
+        1 | 2 => Err(AccountError::ShortName),
+        _ => Ok(true),
+    }
 }
