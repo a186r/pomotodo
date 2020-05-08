@@ -140,7 +140,7 @@ impl Secret {
             (false, true) => {
                 *self = Self::zero();
                 Ok(())
-            },
+            }
             (false, false) => {
                 let mut key_secret = self.to_secp256k1_secret()?;
                 let other_secret = other.to_secp256k1_secret()?;
@@ -183,10 +183,10 @@ impl Secret {
             1 => (),
             _ => {
                 let c = self.clone();
-                for _ in 1..pow{
+                for _ in 1..pow {
                     self.mul(&c)?;
                 }
-            },
+            }
         }
 
         Ok(())

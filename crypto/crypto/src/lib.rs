@@ -2,6 +2,7 @@ mod secret;
 mod keypair;
 // mod random;
 mod error;
+mod keccak;
 
 use ethereum_types;
 use lazy_static::*;
