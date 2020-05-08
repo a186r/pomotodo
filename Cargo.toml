@@ -2,7 +2,7 @@
 members = [
     "account-sys",
     "pomodb",
-    "crypto/crypto"
+    "crypto"
 ]
 
 [profile.release]
