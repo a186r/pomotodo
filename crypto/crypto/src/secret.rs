@@ -117,6 +117,41 @@ impl Secret {
         }
     }
 
+    pub fn dec(&mut self) -> Result<(), Error> {
+        match self.is_zero() {
+            true => {
+                *self = key::MINUS_ONE_KEY.into();
+                Ok(())
+            }
+            false => {
+                let mut key_secret = self.to_secp256k1_secret()?;
+                key_secret.add_assign(&SECP256K1, &key::MINUS_ONE_KEY)?;
+
+                *self = key_secret.into();
+                Ok(())
+            }
+        }
+    }
+
+    /// 两个私钥相乘
+    pub fn mul(&mut self, other: &Secret) -> Result<(), Error> {
+        match (self.is_zero(), other.is_zero()) {
+            (true, true) | (true, false) => Ok(()),
+            (false, true) => {
+                *self = Self::zero();
+                Ok(())
+            },
+            (false, false) => {
+                let mut key_secret = self.to_secp256k1_secret()?;
+                let other_secret = other.to_secp256k1_secret()?;
+                key_secret.mul_assign(&SECP256K1, &other_secret)?;
+
+                *self = key_secret.into();
+                Ok(())
+            }
+        }
+    }
+
     pub fn neg(&mut self) -> Result<(), Error> {
         match self.is_zero() {
             true => Ok(()),
@@ -128,6 +163,33 @@ impl Secret {
                 Ok(())
             }
         }
+    }
+
+    pub fn inv(&mut self) -> Result<(), Error> {
+        let mut key_secret = self.to_secp256k1_secret()?;
+        key_secret.inv_assign(&SECP256K1)?;
+
+        *self = key_secret.into();
+        Ok(())
+    }
+
+    pub fn pow(&mut self, pow: usize) -> Result<(), Error> {
+        if self.is_zero() {
+            return Ok(());
+        }
+
+        match pow {
+            0 => *self = key::ONE_KEY.into(),
+            1 => (),
+            _ => {
+                let c = self.clone();
+                for _ in 1..pow{
+                    self.mul(&c)?;
+                }
+            },
+        }
+
+        Ok(())
     }
 
     // 从Srcret创建SecretKey
