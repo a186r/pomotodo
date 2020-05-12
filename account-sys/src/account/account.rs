@@ -29,6 +29,9 @@ impl Account {
             Ok(_) => Ok(account),
             Err(e) => Err(e),
         }
+
+        // 为账户生成keystore
+        
     }
 }
 
