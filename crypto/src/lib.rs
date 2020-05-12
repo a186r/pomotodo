@@ -7,7 +7,6 @@ pub fn test_key() {
     println!("{:?}", key.address());
 
     let str = String::from("test string");
-    
     let message = Keccak256::keccak256(str.as_bytes());
 
     let signature = key.sign(&message).unwrap();
