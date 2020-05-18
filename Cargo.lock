@@ -3,6 +3,10 @@
 [[package]]
 name = "account-sys"
 version = "0.1.0"
+dependencies = [
+ "crypto",
+ "ethkey",
+]
 
 [[package]]
 name = "aes"

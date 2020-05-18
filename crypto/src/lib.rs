@@ -1,1 +1,1 @@
-pub mod ethkey;
+pub mod eth_account;

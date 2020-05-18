@@ -1,4 +1,5 @@
 use super::error::{AccountError, Result};
+use crypto::eth_account;
 use std::collections::HashMap;
 
 // 声明一个账户结构体, 用于登陆
@@ -19,9 +20,20 @@ pub type Accounts = HashMap<Account, AccountInfo>;
 
 impl Account {
     /// 新建账户
-    pub fn new(username: &str) -> Result<Account> {
+    pub fn new(username: &str, password: &str) -> Result<Account> {
         let account = Account {
             username: Some(String::from(username)),
+        };
+
+        // 为账户生成keystore
+        // 创建一个公私钥对
+        let eth_account =
+            eth_account::EtherAccount::generate_eth_account("./res/keystore", password);
+
+        let _accountinfo = AccountInfo {
+            eth_address: String::from(eth_account.address()),
+            btc_address: String::from(""),
+            xmr_address: String::from(""),
         };
 
         // 检查账户信息
@@ -29,9 +41,6 @@ impl Account {
             Ok(_) => Ok(account),
             Err(e) => Err(e),
         }
-
-        // 为账户生成keystore
-        
     }
 }
 
@@ -45,7 +54,7 @@ fn check_account(account: &Account) -> Result<bool> {
     {
         result = match check_username(username) {
             Ok(_) => Ok(true),
-            Err(e) => Err(e)
+            Err(e) => Err(e),
         };
     };
 
