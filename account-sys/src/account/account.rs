@@ -20,25 +20,17 @@ pub type Accounts = HashMap<Account, AccountInfo>;
 
 impl Account {
     /// 新建账户
-    pub fn new(username: &str, password: &str) -> Result<Account> {
+    pub fn new(username: &str, filepath: &str, password: &str) -> Result<Account> {
         let account = Account {
             username: Some(String::from(username)),
         };
 
-        // 为账户生成keystore
-        // 创建一个公私钥对
-        let eth_account =
-            eth_account::EtherAccount::generate_eth_account("./res/keystore", password);
-
-        let _accountinfo = AccountInfo {
-            eth_address: String::from(eth_account.address()),
-            btc_address: String::from(""),
-            xmr_address: String::from(""),
-        };
-
         // 检查账户信息
         match check_account(&account) {
-            Ok(_) => Ok(account),
+            Ok(_) => {
+                creata_blockchain_account(filepath, password);
+                Ok(account)
+            },
             Err(e) => Err(e),
         }
     }
@@ -68,4 +60,18 @@ fn check_username(username: &String) -> Result<bool> {
         1 | 2 => Err(AccountError::ShortName),
         _ => Ok(true),
     }
+}
+
+/// 为账户生成keystore，并记录账户信息
+/// TODO:顺便在区块链上开户？
+fn creata_blockchain_account(file_path: &str, password: &str) {
+    // 创建一个公私钥对
+    let eth_account =
+        eth_account::EtherAccount::generate_eth_account(file_path, password);
+
+    let _accountinfo = AccountInfo {
+        eth_address: String::from(eth_account.address()),
+        btc_address: String::from(""),
+        xmr_address: String::from(""),
+    };
 }

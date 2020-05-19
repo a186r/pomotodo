@@ -3,6 +3,6 @@ use crate::account::account::Account;
 
 #[test]
 fn test_account_new() {
-    let account1 = Account::new("a186r", "password");
+    let account1 = Account::new("a186r", "./res/keystore", "password");
     println!("{:?}", account1);
 }
