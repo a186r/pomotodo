@@ -28,9 +28,9 @@ impl Account {
         // 检查账户信息
         match check_account(&account) {
             Ok(_) => {
-                creata_blockchain_account(filepath, password);
+                create_blockchain_account(filepath, password);
                 Ok(account)
-            },
+            }
             Err(e) => Err(e),
         }
     }
@@ -63,11 +63,10 @@ fn check_username(username: &String) -> Result<bool> {
 }
 
 /// 为账户生成keystore，并记录账户信息
-/// TODO:顺便在区块链上开户？
-fn creata_blockchain_account(file_path: &str, password: &str) {
+/// TODO:调用智能合约，在区块链上开户
+fn create_blockchain_account(file_path: &str, password: &str) {
     // 创建一个公私钥对
-    let eth_account =
-        eth_account::EtherAccount::generate_eth_account(file_path, password);
+    let eth_account = eth_account::EtherAccount::generate_eth_account(file_path, password);
 
     let _accountinfo = AccountInfo {
         eth_address: String::from(eth_account.address()),
