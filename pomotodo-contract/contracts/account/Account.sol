@@ -6,7 +6,10 @@ contract Account is Base {
     address owner;
     AccountInfo accountInfo;
 
-    constructor (bytes memory _username, address _ethAddress) public {
+    ///@dev 构造函数
+    ///@param _username bytes16可以存储8个中文或者16个英文字母
+    ///@param _ethAddress  创建个人实体合约时的eth地址
+    constructor (bytes16 _username, address _ethAddress) public {
         AccountInfo(_username, _ethAddress, "", "");
     }
 
@@ -16,13 +19,13 @@ contract Account is Base {
     }
 
     struct AccountInfo {
-        bytes username;
+        bytes16 username;
         address ethAddress;
         bytes btcAddress;
         bytes xmrAddress;
     }
 
-    function changeUsername(bytes memory _username) public Owner() returns(bool) {
+    function changeUsername(bytes16 _username) public Owner() returns(bool) {
         accountInfo.username = _username;
         emit ChangeAccountInfoSuccess(
             owner,
@@ -35,7 +38,7 @@ contract Account is Base {
     }
 
     function getAccountInfo() public returns(
-        bytes memory,
+        bytes16,
         address,
         bytes memory,
         bytes memory
@@ -46,6 +49,8 @@ contract Account is Base {
             accountInfo.btcAddress,
             accountInfo.xmrAddress
         );
+
+        return (accountInfo.username, accountInfo.ethAddress, accountInfo.btcAddress, accountInfo.xmrAddress);
     }
 
 }
